@@ -7,7 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class NaszeMiastoNews {
+public class RssNews
+{
 
     private String imageLink;
     private String longitude;

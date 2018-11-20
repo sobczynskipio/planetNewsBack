@@ -1,23 +1,24 @@
 package com.planet.news.news.restcontroller;
 
-import com.planet.news.news.model.NaszeMiastoNews;
-import com.planet.news.news.rssfetcher.NaszeMiastoFetcher;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.planet.news.news.model.RssNews;
+import com.planet.news.news.rssfetcher.RssNewsFetcher;
 
 @RestController
 @RequestMapping("/news")
 public class NewsController {
 
     @Autowired
-    private NaszeMiastoFetcher naszeMiastoFetcher;
+    private RssNewsFetcher naszeMiastoFetcher;
 
     @GetMapping("/rss")
-    public List<NaszeMiastoNews> getNews(){
+    public List<RssNews> getNews(){
         return naszeMiastoFetcher.getNews();
     }
 }

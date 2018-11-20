@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NaszeMiastoNewsConfig {
+public class RssNewsConfig
+{
     private String path;
     private String imageLocation;
 }
