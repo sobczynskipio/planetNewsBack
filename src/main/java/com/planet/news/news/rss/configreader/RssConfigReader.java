@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ResourceUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planet.news.news.model.RssNewsConfig;
 
@@ -18,7 +19,6 @@ import com.planet.news.news.model.RssNewsConfig;
 public class RssConfigReader
 {
     ObjectMapper objectMapper = new ObjectMapper();
-    private RssNewsConfig naszeMiastoNewsConfig;
     private String configFilePath = "classpath:news/rss/naszemiasto/naszemiasto.json";
 
     private List<RssNewsConfig> rssNewsConfigs;
@@ -26,8 +26,7 @@ public class RssConfigReader
     public RssConfigReader(){
         rssNewsConfigs = new ArrayList<>();
         try {
-            naszeMiastoNewsConfig = objectMapper.readValue(readConfigFile(), RssNewsConfig.class);
-            rssNewsConfigs.add(naszeMiastoNewsConfig);
+            rssNewsConfigs = objectMapper.readValue(readConfigFile(), new TypeReference<List<RssNewsConfig>>(){});
         }catch (IOException e ){
             System.out.println(e);
         }

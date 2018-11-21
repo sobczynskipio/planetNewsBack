@@ -9,4 +9,6 @@ public class RssNewsConfig
 {
     private String path;
     private String imageLocation;
+    private Double longitude;
+    private Double latitude;
 }

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.planet.news.news.model.RssNews;
-import com.planet.news.news.rssfetcher.RssNewsFetcher;
+import com.planet.news.news.rssfetcher.RssPlanetNewsComposer;
 
 @RestController
 @RequestMapping("/news")
 public class NewsController {
 
     @Autowired
-    private RssNewsFetcher naszeMiastoFetcher;
+    private RssPlanetNewsComposer naszeMiastoFetcher;
 
     @GetMapping("/rss")
     public List<RssNews> getNews(){

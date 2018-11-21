@@ -9,8 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RssNews
 {
-
     private String imageLink;
-    private String longitude;
-    private String latitude;
+    private Double longitude;
+    private Double latitude;
 }

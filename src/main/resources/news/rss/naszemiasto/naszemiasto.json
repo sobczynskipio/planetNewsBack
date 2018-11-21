@@ -1,4 +1,14 @@
-{
-  "path": "http://lodz.naszemiasto.pl/rss/artykuly/",
-  "imageLocation": "rss/item/description/img"
-}
+[
+  {
+    "path": "http://lodz.naszemiasto.pl/rss/artykuly/1086.xml",
+    "imageLocation": "item/description/img",
+    "longitude": 19.4559833,
+    "latitude": 51.7592485
+  },
+  {
+    "path": "http://warszawa.naszemiasto.pl/rss/artykuly/1086.xml",
+    "imageLocation": "item/description/img",
+    "longitude": 21.01222870,
+    "latitude": 52.22967560
+  }
+]
