@@ -2,6 +2,7 @@ package com.planet.news.news.rssfetcher;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +18,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.planet.news.news.utils.PlanetNewsUtils;
 
 @Configuration
 @ComponentScan
@@ -38,6 +41,8 @@ public class RssNewsFromXmlFetcher
             e.printStackTrace();
         }
 
+        Stack<String> pathStack = PlanetNewsUtils.getStackOfArray(path.split("/"), false);
+
         NodeList nList = doc.getElementsByTagName("item");
         Element item = (Element) nList.item(0);
         NodeList descrList = item.getElementsByTagName("description");
@@ -46,6 +51,22 @@ public class RssNewsFromXmlFetcher
         org.jsoup.nodes.Document imgTag = Jsoup.parseBodyFragment(((CharacterData)imgCdata).getData());
 
         return imgTag.childNode(0).childNode(1).childNode(0).attr(attribute);
+    }
+
+    private NodeList getBottomElementAtPath(NodeList nodeList, Stack<String> pathComponents){
+
+        if (pathComponents.size() > 1)
+        {
+            try
+            {
+                return getBottomElementAtPath(((Element)nodeList.item(0)).getElementsByTagName(pathComponents.pop()), pathComponents);
+            }catch (ClassCastException e){
+                return ((Element)nodeList.item(0)).getElementsByTagName(pathComponents.pop());
+            }
+
+        }else{
+            return ((Element)nodeList.item(0)).getElementsByTagName(pathComponents.pop());
+        }
     }
 
 }
