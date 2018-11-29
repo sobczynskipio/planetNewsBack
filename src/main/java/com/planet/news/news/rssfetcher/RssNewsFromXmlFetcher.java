@@ -2,6 +2,7 @@ package com.planet.news.news.rssfetcher;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -41,32 +42,34 @@ public class RssNewsFromXmlFetcher
             e.printStackTrace();
         }
 
-        Stack<String> pathStack = PlanetNewsUtils.getStackOfArray(path.split("/"), false);
+        Stack<String> pathStack = PlanetNewsUtils.getStackOfArray(path.split("/"), true);
 
-        NodeList nList = doc.getElementsByTagName("item");
-        Element item = (Element) nList.item(0);
-        NodeList descrList = item.getElementsByTagName("description");
-        Element descr = (Element)descrList.item(0);
-        Node imgCdata = descr.getChildNodes().item(1);
-        org.jsoup.nodes.Document imgTag = Jsoup.parseBodyFragment(((CharacterData)imgCdata).getData());
-
-        return imgTag.childNode(0).childNode(1).childNode(0).attr(attribute);
+        NodeList bottomElementList = getBottomElementListAtPath(doc.getElementsByTagName(pathStack.pop()), pathStack);
+        return getCdataHtmlTagAttribute((Element)bottomElementList.item(0), attribute);
     }
 
-    private NodeList getBottomElementAtPath(NodeList nodeList, Stack<String> pathComponents){
-
-        if (pathComponents.size() > 1)
+    private NodeList getBottomElementListAtPath(NodeList nodeList, Stack<String> pathComponents){
+        String currentComponent = "";
+        try
         {
-            try
+            currentComponent = pathComponents.pop();
+            if (!currentComponent.contains("CDATA"))
             {
-                return getBottomElementAtPath(((Element)nodeList.item(0)).getElementsByTagName(pathComponents.pop()), pathComponents);
-            }catch (ClassCastException e){
-                return ((Element)nodeList.item(0)).getElementsByTagName(pathComponents.pop());
+                return getBottomElementListAtPath(((Element)nodeList.item(0)).getElementsByTagName(currentComponent), pathComponents);
             }
-
-        }else{
-            return ((Element)nodeList.item(0)).getElementsByTagName(pathComponents.pop());
+        }catch (EmptyStackException | ClassCastException e){
+            System.out.println("Exception in fetching xml " + e);
+            return nodeList;
+        }finally
+        {
+            return ((Element)nodeList.item(0)).getElementsByTagName(currentComponent);
         }
+    }
+
+    private String getCdataHtmlTagAttribute(Element element, String attribute){
+        Node imgCdata = element.getChildNodes().item(1);
+        org.jsoup.nodes.Document imgTag = Jsoup.parseBodyFragment(((CharacterData)imgCdata).getData());
+        return imgTag.childNode(0).childNode(1).childNode(0).attr(attribute);
     }
 
 }
